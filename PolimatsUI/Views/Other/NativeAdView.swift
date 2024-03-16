@@ -34,7 +34,8 @@ struct NativeAdView: UIViewRepresentable {
         (nativeAdView.storeView as? UILabel)?.text = nativeAd.store
         (nativeAdView.priceView as? UILabel)?.text = nativeAd.price
         (nativeAdView.advertiserView as? UILabel)?.text = nativeAd.advertiser
-        nativeAdView.callToActionView?.isUserInteractionEnabled = false
+        nativeAdView.callToActionView?.isUserInteractionEnabled = true
+        (nativeAdView.callToActionView as? UILabel)?.text = nativeAd.callToAction
         (nativeAdView.headlineView as? UILabel)?.text = nativeAd.headline
         nativeAdView.nativeAd = nativeAd
 

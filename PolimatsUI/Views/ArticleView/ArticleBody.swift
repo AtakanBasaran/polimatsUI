@@ -67,6 +67,7 @@ struct ImageViewModel: ElementViewModel {
                     .frame(width: 340, alignment: .center)
                     .clipShape(.rect(cornerRadius: 20))
                 
+                
                 Spacer()
             }
         )

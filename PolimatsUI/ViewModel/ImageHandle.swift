@@ -32,6 +32,7 @@ struct ImagePlaceHolder: View {
     
     var body: some View {
         image?.resizable() ?? Image(placeHolder).resizable()
+        
     }
     
 }
@@ -49,7 +50,6 @@ struct ImageHandle: View {
         ImagePlaceHolder(image: imageDownload.image, placeHolder: placeHolder)
             .task {
                 imageDownload.getImage(urlString: urlString)
-
             }
     }
 }

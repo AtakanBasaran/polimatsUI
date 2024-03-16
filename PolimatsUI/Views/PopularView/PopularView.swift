@@ -98,7 +98,6 @@ struct PopularView: View {
         .ignoresSafeArea()
         
         .onChange(of: selectedTab) { value in
-            print(selectedTab)
             selectedData = mainVM.polimatsDataPopular[selectedTab]
         }
     }

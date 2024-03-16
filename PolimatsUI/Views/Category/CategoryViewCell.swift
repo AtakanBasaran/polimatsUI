@@ -28,11 +28,6 @@ struct CategoryViewCell: View {
                     .clipped()
                     .clipShape(.rect(cornerRadius: 20))
                     .padding(.horizontal, 7)
-//                    .overlay {
-//                        RoundedRectangle(cornerRadius: 20)
-//                            .stroke(LinearGradient(colors: [Color(.darkGray)], startPoint: .top, endPoint: .bottom),style: StrokeStyle(lineWidth: 1))
-//                            .padding(.horizontal, 7)
-//                    }
                     .overlay(alignment: .bottomLeading) {
                         CategoryRectangleNew(category: manager.getCategory(dataPolimats: dataPolimats), width: 90, height: 30)
                             .padding(.leading, 7)

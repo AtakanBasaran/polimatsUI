@@ -11,6 +11,7 @@ struct ArticleViewBeginning: View {
     
     let dataPolimats: WordPressData
     let manager = Manager()
+    @State private var image: UIImage?
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -33,6 +34,14 @@ struct ArticleViewBeginning: View {
                                 .frame(width: geo.size.width * 0.95, height: 290, alignment: .center)
                                 .clipped()
                                 .clipShape(.rect(cornerRadius: 20))
+                                .onLongPressGesture {
+                                    
+                                    if let imageToSave = self.image {
+                                        UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
+                                    } else {
+                                        print("error saving")
+                                    }
+                                }
                             
                             Color.black.opacity(0.6)
                                 .clipShape(.rect(cornerRadius: 20))

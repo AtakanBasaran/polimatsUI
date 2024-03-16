@@ -14,6 +14,7 @@ struct CategoryView: View {
     @State private var scrollUp: Bool = false
     @State private var animate = false
     @State var dataFetch: WordPressData = exData.exArticle
+    @State private var showSearchView = false
     
     
     
@@ -26,10 +27,12 @@ struct CategoryView: View {
                 ScrollViewReader { scroll in
                     ScrollView {
                         
-                        NavigationBar()
-                            .padding(.top, 10)
-                            .id("navigation")
-                            .offset(x: animate ? 0 : -175)
+                        NavigationBar(action: {
+                            showSearchView = true
+                        })
+                        .padding(.top, 10)
+                        .id("navigation")
+                        .offset(x: animate ? 0 : -175)
  
                         Categories()
                             .padding(.top, 15)
@@ -130,6 +133,9 @@ struct CategoryView: View {
             mainVM.polimatsData.removeAll()
             mainVM.currentPage = 1
             mainVM.getData()
+        }
+        .popover(isPresented: $showSearchView) {
+            SearchView()
         }
     
     }

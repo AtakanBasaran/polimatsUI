@@ -9,9 +9,13 @@ import SwiftUI
 
 struct NavigationBar: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    @State var animation = true
     @EnvironmentObject var mainVM: MainPageViewModel
+    @Environment(\.colorScheme) var colorScheme
+    @State private var animation = true
+    @State private var animationSearch = true
+    let action: () -> ()
+    
+    
     
     var body: some View {
         
@@ -21,29 +25,42 @@ struct NavigationBar: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 55, height: 55, alignment: .center)
                 .rotationEffect(.degrees(animation ? 0 : 360), anchor: .center)
-//                .shadow(radius: 5)
             
                 .onAppear {
+
                     if !mainVM.isLoadingLogo {
-                        withAnimation(.easeInOut(duration: 2).delay(1.5)) {
+                        withAnimation(.easeInOut(duration: 2).delay(2)) {
                             self.animation = false
+                            self.animationSearch = false
                         }
                     }
                 }
             
                 .onChange(of: mainVM.isLoadingLogo) { _ in
-                    withAnimation(.easeInOut(duration: 2).delay(1.5)) {
+                    withAnimation(.easeInOut(duration: 2).delay(2)) {
                         self.animation = false
+                        self.animationSearch = false
                     }
                 }
 
-            
-            
+    
             Text("polimats")
-//                .font(.custom("Roboto-Medium", size: 22))
                 .font(.custom("Comfortaa-Bold", size: 28))
-//                .shadow(radius: 5)
-                
+            
+            Spacer()
+            
+            Button {
+                action()
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                    .padding(.trailing, 30)
+                    .padding(.bottom, 1.5)
+                    .font(.system(size: 22))
+                    .opacity(animationSearch ? 0 : 1)
+                    .scaleEffect(animationSearch ? 0.5 : 1)
+            }
+    
         }
         .frame(width: 380, height: 35, alignment: .leading)
         .padding(.leading, 25)
@@ -52,5 +69,7 @@ struct NavigationBar: View {
 }
 
 #Preview {
-    NavigationBar()
+    NavigationBar(action: {
+        print("")
+    })
 }

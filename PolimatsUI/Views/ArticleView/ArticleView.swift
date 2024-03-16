@@ -51,10 +51,12 @@ struct ArticleView: View {
                             
                             
                             Writer(dataPolimats: dataPolimats)
-                                .padding(.top, 85)
-                            
-                            MoreArticle()
                                 .padding(.top, 55)
+                            
+                            if manager.getCategory(dataPolimats: dataPolimats) != "English" {
+                                MoreArticle()
+                                    .padding(.top, 55)
+                            }
                             
                             
                             NativeAdView(nativeAdViewModel: adVM)
