@@ -59,7 +59,6 @@ struct CategoryView: View {
                         .navigationDestination(isPresented: $mainVM.isActive, destination: {
                             ArticleView(dataPolimats: dataFetch)
                         })
-                        //                            .padding(.top, 10)
                         
                         EndArticleCategory()
                             .padding(.top, 135)
@@ -117,19 +116,10 @@ struct CategoryView: View {
             SearchView()
         }
         
-//        .toolbar(.hidden, for: .navigationBar)
-//        .toolbar(.hidden, for: .tabBar)
-        
     }
 }
 
 
-struct ScrollOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGPoint = .zero
-    
-    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
-    }
-}
 
 //#Preview {
 //    CategoryView()
