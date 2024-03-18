@@ -15,99 +15,61 @@ struct ArticleView: View {
     @EnvironmentObject var adVM: ViewModelAd
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
-    @State private var showButton = false
-    @State private var scrollUp: Bool = false
     @State private var isPresentedSearch = false
     let manager = Manager()
-
-    
     
     
     var body: some View {
         
-        ZStack {
+        NavigationStack {
             
-            NavigationStack {
+            ScrollView {
                 
-                ScrollViewReader { scroll in
-                    ScrollView {
-                        
-                        VStack(spacing: 20) {
-                            ArticleViewBeginning(dataPolimats: dataPolimats)
-                                .id("topArticle")
-                            
-                            
-                            ArticleBody(dataPolimats: dataPolimats)
-                                .padding(.top, 25)
-                            
-                                .background(GeometryReader { geo in
-                                    Color.clear
-                                        .preference(key: ScrollOffsetPreferenceKey.self, value: geo.frame(in: .named("scroll")).origin)
-                                })
-                                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                                    let threshold: CGFloat = 30
-                                    showButton = value.y < threshold
-                                }
-                            
-                            
-                            Writer(dataPolimats: dataPolimats)
-                                .padding(.top, 55)
-                            
-                            if manager.getCategory(dataPolimats: dataPolimats) != "English" {
-                                MoreArticle()
-                                    .padding(.top, 55)
-                            }
-                            
-                            
-                            NativeAdView(nativeAdViewModel: adVM)
-                                .padding(.top, 100)
-                                .frame(height: 400, alignment: .center)
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 10)
-                            
-                            
-                            EndArticle()
-                                .padding(.top, 100)
-                                .padding(.bottom, 25)
-                                .ignoresSafeArea()
-                                
-                        }
-                    }
-                    .gesture(
-                        DragGesture()
-                            .onChanged({ gesture in
-                                if gesture.translation.width > 40 {
-                                    withAnimation(.smooth) {
-                                        dismiss()
-                                    }
-                                }
-                            })
-                    )
+                VStack(spacing: 20) {
+                    ArticleViewBeginning(dataPolimats: dataPolimats)
+                        .padding(.horizontal, 5)
                     
-                    .coordinateSpace(name: "scroll")
-                    .onChange(of: scrollUp) { _ in
-                        withAnimation(.smooth) {
-                            scroll.scrollTo("topArticle", anchor: .top)
+                    ArticleBody(dataPolimats: dataPolimats)
+                        .padding(.horizontal, 5)
+                        .padding(.top, 20)
+                    
+                    
+                    Writer(dataPolimats: dataPolimats)
+                        .padding(.top, 55)
+                    
+                    if manager.getCategory(dataPolimats: dataPolimats) != "English" {
+                        MoreArticle()
+                            .padding(.top, 55)
+                    }
+                    
+                    
+                    NativeAdView(nativeAdViewModel: adVM)
+                        .padding(.top, 100)
+                        .frame(width: 350, height: 400, alignment: .center)
+                        .padding(.horizontal, 10)
+                    
+                    
+                    EndArticle()
+                        .padding(.top, 100)
+//                        .padding(.bottom, 25)
+                        .ignoresSafeArea()
+                    
+                }
+            }
+            .gesture(
+                DragGesture()
+                    .onChanged({ gesture in
+                        if gesture.translation.width > 40 {
+                            withAnimation(.smooth) {
+                                dismiss()
+                            }
                         }
-                    }
-                }
-            }
-            
-            VStack {
-                Spacer() //to push bottom
-                HStack {
-                    Spacer() //to push right
-                    UpButton(showButton: $showButton) {
-                        scrollUp.toggle()
-                        showButton = false
-                    }
-                }
-            }
-            .padding(.bottom, 110)
-            .padding(.trailing, 20)
-            
+                    })
+            )
             
         }
+        
+        
         .ignoresSafeArea(edges: .horizontal)
         
         
@@ -150,7 +112,7 @@ struct ArticleView: View {
                     
                 } label: {
                     
-                        Image(systemName: "ellipsis.circle")
+                    Image(systemName: "ellipsis.circle")
                         .foregroundStyle(colorScheme == .dark ? .white : .black)
                 }
             }
@@ -167,8 +129,9 @@ struct ArticleView: View {
         })
         
         .onAppear {
-            mainVM.showButton = false
+            mainVM.articleOnline = true
         }
+        
         .task {
             
             if let category = dataPolimats.categories.first {
@@ -179,13 +142,7 @@ struct ArticleView: View {
                 }
             }
             
-            
-            
         }
-        .onDisappear(perform: {
-            showButton = false
-        })
-        
     }
 }
 

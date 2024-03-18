@@ -12,7 +12,6 @@ struct PopularView: View {
     
     @EnvironmentObject var mainVM: MainPageViewModel
     @State var dataTap: WordPressData
-    @State private var scroll = true
     @State private var selectedTab = 0
     @State var selectedData: WordPressData?
     @Environment(\.colorScheme) var colorScheme
@@ -20,80 +19,78 @@ struct PopularView: View {
     
     var body: some View {
         
-        ZStack {
+        GeometryReader { geo in
             
-            GeometryReader { geo in
+            NavigationStack {
                 
-                NavigationStack {
+                ZStack {
                     
-                    ZStack {
+                    if let selectedData {
                         
-                        if let selectedData {
+                        withAnimation(.spring) {
                             
-                            withAnimation(.spring) {
-                                
-                                AsyncImage(url: URL(string: selectedData.featuredImageSrc), content: { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .ignoresSafeArea()
-                                }, placeholder: {
-                                    Image("grayImage")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .ignoresSafeArea()
-                                })
-                                
-                            }
+                            AsyncImage(url: URL(string: selectedData.featuredImageSrc), content: { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .ignoresSafeArea()
+                            }, placeholder: {
+                                Image("grayImage")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .ignoresSafeArea()
+                            })
                             
-                        } else {
-                            
-                            withAnimation(.spring) {
-                                
-                                AsyncImage(url: URL(string: mainVM.polimatsDataPopular[0].featuredImageSrc), content: { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .ignoresSafeArea()
-                                }, placeholder: {
-                                    Image("grayImage")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .ignoresSafeArea()
-                                })
-                                
-                            }
                         }
                         
-                        Color.black.opacity(0.3)
-                            .ignoresSafeArea()
+                    } else {
                         
-                        
-                        TabView(selection: $selectedTab) {
+                        withAnimation(.spring) {
                             
-                            ForEach(mainVM.polimatsDataPopular.indices, id: \.self) { index in
-                                PopularCell(dataPolimats: mainVM.polimatsDataPopular[index], action: {
-                                    withAnimation(.spring) {
-                                        dataTap = mainVM.polimatsDataPopular[index]
-                                        mainVM.hapticFeedback()
-                                        mainVM.showArticle = true
-                                    }
-                                })
-                                
-                            }
-                            .navigationDestination(isPresented: $mainVM.showArticle) {
-                                PopularArticleView(dataPolimats: dataTap)
-                            }
+                            AsyncImage(url: URL(string: mainVM.polimatsDataPopular[0].featuredImageSrc), content: { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .ignoresSafeArea()
+                            }, placeholder: {
+                                Image("grayImage")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .ignoresSafeArea()
+                            })
+                            
                         }
-                        .tabViewStyle(.page(indexDisplayMode: .always))
-                        .indexViewStyle(.page(backgroundDisplayMode: .interactive))
-                        .frame(width: geo.size.width, height: geo.size.height * 0.75, alignment: .center)
-                        .padding(.bottom, 55)
-                        
                     }
+                    
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    
+                    
+                    TabView(selection: $selectedTab) {
+                        
+                        ForEach(mainVM.polimatsDataPopular.indices, id: \.self) { index in
+                            PopularCell(dataPolimats: mainVM.polimatsDataPopular[index], action: {
+                                withAnimation(.spring) {
+                                    dataTap = mainVM.polimatsDataPopular[index]
+                                    mainVM.hapticFeedback()
+                                    mainVM.showArticle = true
+                                }
+                            })
+                            
+                        }
+                        .navigationDestination(isPresented: $mainVM.showArticle) {
+                            PopularArticleView(dataPolimats: dataTap)
+                        }
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .always))
+                    .indexViewStyle(.page(backgroundDisplayMode: .interactive))
+                    .frame(width: geo.size.width, height: geo.size.height * 0.75, alignment: .center)
+                    .padding(.bottom, 55)
+                    
                 }
             }
         }
+        
         
         .ignoresSafeArea()
         

@@ -11,22 +11,31 @@ import SwiftUI
 
 @MainActor class MainPageViewModel: ObservableObject {
     
+    //published datas for different views and features
     @Published var polimatsData: [WordPressData] = []
     @Published var polimatsDataMore: [WordPressData] = []
     @Published var polimatsDataPopular: [WordPressData] = []
     @Published var polimatsDataSearch: [WordPressData] = []
     @Published var polimatsDataRandom: [WordPressData] = []
+    
+    
     @Published var isLoading = false
-    @Published var showButton = false
     @Published var isLoadingLogo = true
+    
+    //navigation links
     @Published var isActive = false
     @Published var isActiveSearch = false
     @Published var isActiveRandom = false
     @Published var showArticle = false
-    
-    
+    @Published var scrollToTop = false
+    @Published var articleOnline = false
+    @Published var popularArticleOnline = false
+    @Published var randomArticleOnline = false
+    @Published var dismissPopularArticle = false
+    @Published var dismissForYouArticle = false
 
 
+   
     var currentPage = 1
     var lastSelectedCategory: String = ""
     var lastSelectedCategoryMore: Int? = nil
@@ -45,8 +54,6 @@ import SwiftUI
                 var newData = try await NetworkManager.shared.downloadData(urlString: urlString)
                 print("done data")
 
-//                newData.removeAll {$0.categories == [140] }
-//                newData = newData.filter { $0.categories.first != 140 }
                 polimatsData.append(contentsOf: newData)
                 isLoading = false
                 currentPage += 1
@@ -218,7 +225,6 @@ import SwiftUI
                 var newData = try await NetworkManager.shared.downloadData(urlString: urlString)
                 print("done random data")
                 
-                
                 polimatsDataRandom.append(newData.randomElement() ?? exData.exArticle)
                 newData.removeAll()
                 isLoading = false
@@ -249,10 +255,8 @@ import SwiftUI
     }
     
     func hapticFeedback() {
-        
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.impactOccurred()
-        
     }
     
 }

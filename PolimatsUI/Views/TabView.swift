@@ -14,11 +14,11 @@ struct TabbedView: View {
     @EnvironmentObject var mainVM: MainPageViewModel
     @EnvironmentObject var adVM: ViewModelAd
     @StateObject var networkMonitor = NetworkMonitor()
-    @State private var isMenuOpen = false // Track if menu is open
+    
+    @State private var isMenuOpen = false
     @State private var animateMenu = false
     @State private var isButtonTapped = true
     @State private var isMenuButtonTapped = false
-    
     
     
     
@@ -56,24 +56,16 @@ struct TabbedView: View {
                             
                             withAnimation(.easeInOut(duration: 0.7)) {
                                 isMenuOpen = false
-//                                selectedTab = 0
                                 isButtonTapped = false
                             }
                             animateMenu = false
                             
                         }
-                        
-                        if newValue != 2 {
-                            mainVM.isActiveRandom = false
-                        }
-                        
-                        if newValue != 1 {
-                            mainVM.showArticle = false
-                        }
-                        
+                
                         if newValue == 0 {
                             isButtonTapped = true
                         }
+                        
                     }
             }
             
@@ -109,13 +101,33 @@ struct TabbedView: View {
                             if selectedTab == 0 {
                                 
                                 if isButtonTapped {
-                                    mainVM.isActive = false
+                                    if mainVM.articleOnline {
+                                        mainVM.isActive = false
+                                        mainVM.articleOnline = false
+                                    } else {
+                                        mainVM.scrollToTop.toggle()
+                                    }
+                                    
                                 } else {
-                                    // Update the state for the first tap
+                                    // first tap
                                     isButtonTapped = true
                                 }
                             } else {
                                 isButtonTapped = false
+                            }
+                            
+                            if selectedTab == 1 && mainVM.popularArticleOnline {
+                                mainVM.dismissPopularArticle.toggle()
+                                mainVM.popularArticleOnline = false
+                            } else {
+                                mainVM.popularArticleOnline = false
+                            }
+                            
+                            if selectedTab == 2 && mainVM.randomArticleOnline {
+                                mainVM.dismissForYouArticle.toggle()
+                                mainVM.randomArticleOnline = false
+                            } else {
+                                mainVM.randomArticleOnline = false
                             }
                             
 //                            if selectedTab == 3 {
@@ -178,6 +190,7 @@ struct TabbedView: View {
             if mainVM.polimatsDataPopular.isEmpty {
                 mainVM.getPopularData()
             }
+            adVM.refreshAd()
         }
         
     }

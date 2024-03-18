@@ -29,7 +29,7 @@ struct NavigationBar: View {
                 .onAppear {
 
                     if !mainVM.isLoadingLogo {
-                        withAnimation(.easeInOut(duration: 2).delay(2)) {
+                        withAnimation(.easeInOut(duration: 2).delay(1.7)) {
                             self.animation = false
                             self.animationSearch = false
                         }
@@ -37,7 +37,7 @@ struct NavigationBar: View {
                 }
             
                 .onChange(of: mainVM.isLoadingLogo) { _ in
-                    withAnimation(.easeInOut(duration: 2).delay(2)) {
+                    withAnimation(.easeInOut(duration: 2).delay(1.7)) {
                         self.animation = false
                         self.animationSearch = false
                     }

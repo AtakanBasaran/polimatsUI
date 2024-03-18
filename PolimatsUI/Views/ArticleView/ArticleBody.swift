@@ -55,19 +55,20 @@ struct LinkedParagraphViewModel: ElementViewModel {
 struct ImageViewModel: ElementViewModel {
     let id = UUID().uuidString
     let src: String
+    @State var imageTapped = false
     var view: AnyView {
         
         AnyView(
             
             HStack {
                 Spacer()
-                
+     
                 ImageHandle(placeHolder: "grayImage", urlString: src)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 340, alignment: .center)
                     .clipShape(.rect(cornerRadius: 20))
-                
-                
+                    
+     
                 Spacer()
             }
         )

@@ -15,47 +15,46 @@ struct Announcement: View {
     @State private var scrollUp: Bool = false
     @State private var showButton: Bool = false
     @State private var isMenuOpen = false
-
+    
     
     
     var body: some View {
         
-        ZStack {
+    
+        NavigationStack {
             
-            NavigationStack {
+            ScrollView {
                 
-                ScrollView {
+                LazyVStack(spacing: 15) {
                     
-                    LazyVStack(spacing: 15) {
+                    ForEach(mainVM.polimatsData) { dataFetch in
                         
-                        ForEach(mainVM.polimatsData) { dataFetch in
-                            
-                            NavigationLink(destination: ArticleView(dataPolimats: dataFetch)) {
-                                CategoryViewCell(dataPolimats: dataFetch)
+                        NavigationLink(destination: ArticleView(dataPolimats: dataFetch)) {
+                            CategoryViewCell(dataPolimats: dataFetch)
+                        }
+                    }
+                    
+                    EndArticle()
+                        .padding(.top, 145)
+                        .padding(.bottom, 5)
+                        .padding(.horizontal, 5)
+                }
+                .padding(.top, 25)
+            }
+            .gesture(
+                DragGesture()
+                    .onChanged({ gesture in
+                        if gesture.translation.width > 20 {
+                            withAnimation(.smooth) {
+                                dismiss()
                             }
                         }
-                        
-                        EndArticle()
-                            .padding(.top, 145)
-                            .padding(.bottom, 5)
-                            .padding(.horizontal, 5)
-                    }
-                    .padding(.top, 25)
-                }
-                .gesture(
-                    DragGesture()
-                        .onChanged({ gesture in
-                            if gesture.translation.width > 20 {
-                                withAnimation(.smooth) {
-                                    dismiss()
-                                }
-                            }
-                        })
-                )
-                
-            }
+                    })
+            )
             
         }
+        
+        
         
         .toolbar {
             
@@ -80,7 +79,7 @@ struct Announcement: View {
                     Image(systemName: "house")
                         .foregroundStyle(colorScheme == .dark ? .white : .black)
                 }
-
+                
             }
         }
         .navigationBarBackButtonHidden()
@@ -93,9 +92,6 @@ struct Announcement: View {
             mainVM.getData(category: "&categories=33")
         }
         
-        .onAppear(perform: {
-            mainVM.showButton = false
-        })
         .onDisappear {
             mainVM.polimatsData.removeAll()
             mainVM.currentPage = 1

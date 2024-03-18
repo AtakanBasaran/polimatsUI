@@ -81,9 +81,6 @@ struct Team: View {
             }
         }
         
-        .onAppear(perform: {
-            mainVM.showButton = false
-        })
         
         .navigationBarBackButtonHidden()
         .navigationTitle("Ekip")

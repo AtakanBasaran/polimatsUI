@@ -114,10 +114,7 @@ struct AboutUs: View {
         .navigationTitle("Hakkımızda")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden()
-        
-        .onAppear(perform: {
-            mainVM.showButton = false
-        })
+ 
         
     }
 }

@@ -48,6 +48,7 @@ struct ImageHandle: View {
     var body: some View {
         
         ImagePlaceHolder(image: imageDownload.image, placeHolder: placeHolder)
+        
             .task {
                 imageDownload.getImage(urlString: urlString)
             }

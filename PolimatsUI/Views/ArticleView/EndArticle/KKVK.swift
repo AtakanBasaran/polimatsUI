@@ -24,9 +24,7 @@ struct KKVK: View {
                     .font(.custom("Roboto-Bold", size: 24))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 10)
-                    .padding(.bottom, 35)
-                    .id("top1")
-                
+                    
                 
                 VStack(alignment: .leading, spacing: 20) {
                     Text("KULLANIM KOŞULLARI")
@@ -104,9 +102,7 @@ struct KKVK: View {
                     }
                 })
         )
-        
-        
-        
+        .navigationBarTitleDisplayMode(.inline)
         .ignoresSafeArea(edges: .bottom)
         .ignoresSafeArea(edges: .horizontal)
         .toolbar {
@@ -136,9 +132,6 @@ struct KKVK: View {
         }
         .navigationBarBackButtonHidden()
         
-        .onAppear(perform: {
-            mainVM.showButton = false
-        })
     }
 }
 

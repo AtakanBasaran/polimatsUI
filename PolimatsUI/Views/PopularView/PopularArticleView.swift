@@ -13,100 +13,67 @@ struct PopularArticleView: View {
     
     @EnvironmentObject var mainVM: MainPageViewModel
     @EnvironmentObject var adVM: ViewModelAd
+    @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     @State private var showButton = false
     @State private var scrollUp: Bool = false
     
     
-
     var body: some View {
         
-        ZStack {
+        NavigationStack {
             
-            NavigationStack {
+            ScrollView {
                 
-                ScrollViewReader { scroll in
+                VStack(spacing: 20) {
                     
-                    ScrollView {
-                        
-                        VStack(spacing: 20) {
-                            
-                            ArticleViewBeginning(dataPolimats: dataPolimats)
-                                .padding(.bottom, 5)
-                                .id("topArticle")
-                                
-                            
-                            ArticleBody(dataPolimats: dataPolimats)
-                                .padding(.top, 15)
-                            
-                                .background(GeometryReader { geo in
-                                    Color.clear
-                                        .preference(key: ScrollOffsetPreferenceKey.self, value: geo.frame(in: .named("scroll")).origin)
-                                })
-                                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                                    let threshold: CGFloat = 30
-                                    showButton = value.y < threshold
-                                }
-                            
-                            Writer(dataPolimats: dataPolimats)
-                                .padding(.top, 85)
-            
-                            
-                            NativeAdView(nativeAdViewModel: adVM)
-                                .padding(.top, 100)
-                                .frame(height: 400, alignment: .center)
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 10)
-                            
-                            EndArticleCategory()
-                                .padding(.top, 100)
-                                .padding(.bottom, 15)
-                        }
-                    }
-                    .gesture(
-                        DragGesture()
-                            .onChanged({ gesture in
-                                if gesture.translation.width > 40 {
-                                    withAnimation(.spring) {
-                                        mainVM.showArticle = false
-                                    }
-                                }
-                            })
-                    )
-                    .coordinateSpace(name: "scroll")
-                    .onChange(of: scrollUp) { _ in
-                        withAnimation(.smooth) {
-                            scroll.scrollTo("topArticle", anchor: .top)
-                        }
-                    }
+                    ArticleViewBeginning(dataPolimats: dataPolimats)
+                        .padding(.bottom, 5)
+                        .padding(.horizontal, 5)
+                    
+                    
+                    ArticleBody(dataPolimats: dataPolimats)
+                        .padding(.top, 20)
+                        .padding(.horizontal, 5)
+                    
+                    Writer(dataPolimats: dataPolimats)
+                        .padding(.top, 85)
+                    
+                    
+                    NativeAdView(nativeAdViewModel: adVM)
+                        .padding(.top, 100)
+                        .frame(height: 400, alignment: .center)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 10)
+                    
+                    EndArticleCategory()
+                        .padding(.top, 100)
                 }
             }
+            .gesture(
+                DragGesture()
+                    .onChanged({ gesture in
+                        if gesture.translation.width > 40 {
+                            withAnimation(.spring) {
+                                dismiss()
+                            }
+                        }
+                    })
+            )
             
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    UpButton(showButton: $showButton) {
-                        scrollUp.toggle()
-                        showButton = false
-                    }
-                }
-            }
-            .padding(.bottom, 110)
-            .padding(.trailing, 20)
-     
+            
         }
         .navigationBarBackButtonHidden()
         .navigationTitle("Popüler")
         .navigationBarTitleDisplayMode(.large)
-    
-
-    
+        
+        
+        
         .toolbar {
             
             ToolbarItem(placement: .topBarLeading) {
                 Button {
-                    mainVM.showArticle = false
+                    dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(colorScheme == .dark ? .white : .black)
@@ -116,10 +83,13 @@ struct PopularArticleView: View {
             }
         }
         
-        
-        .onAppear {
-            mainVM.showButton = false
+        .onChange(of: mainVM.dismissPopularArticle) { value in
+            dismiss()
         }
+        
+        .onAppear(perform: {
+            mainVM.popularArticleOnline = true
+        })
         
         .refreshable {
             mainVM.polimatsDataPopular.removeAll()

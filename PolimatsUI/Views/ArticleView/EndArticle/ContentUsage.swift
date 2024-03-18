@@ -17,12 +17,11 @@ struct ContentUsage: View {
         
         ScrollView {
             
-            Text("İÇERİK KULLANIM BİLDİRGESİ")
-                .font(.custom("Roboto-Bold", size: 28))
+            Text("İÇERİK KULLANIM \nBİLDİRGESİ")
+                .font(.custom("Roboto-Bold", size: 24))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 10)
-                .padding(.bottom, 5)
-                .id("top2")
+
             
             VStack(alignment: .leading, spacing: 20) {
                 Madde(text: "İnternet sitemizde barındırdığımız her içerik yazarlarımızın kendi cümleleri ile kurduğu özgün metinlerdir. Kullanılan görseller ve yan içerikler kaynakça gösterilerek paylaşılmaktadır. polimats.com olarak bilginin paylaşılması tarafındayız. Yazarlarımızın yazılarını kaynakça gösterilerek ve aşağıdaki kurallara uyularak paylaşabilir, kopyalayabilir, yapıştırılabilir, çoğaltalabilir, basabilir, dağıtabilir, yayınlayabilirsiniz. Ancak bu içeriklerin hiçbiri izin alınmaksızın değiştirilemez ve değiştirilmiş halleri polimats.com sitesine aitmiş gibi sunulamaz. Benzer şekilde, yazılarımızın hiçbiri, söz konusu içeriklerimizin yazarlarından başkasına aitmiş gibi sunulamaz.")
@@ -98,10 +97,9 @@ struct ContentUsage: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .navigationBarTitleDisplayMode(.inline)
         
-        .onAppear(perform: {
-            mainVM.showButton = false
-        })
+
     }
 }
 
